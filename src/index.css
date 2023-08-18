@@ -1,0 +1,16 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body{
+  font-family: "Poppins", sans-serif !important;
+}
+body::-webkit-scrollbar {
+  display: none;
+}
+.chatBox::-webkit-scrollbar{
+  display: none !important;
+}
+.swiper-slide-shadow{
+  background: none !important;
+}
