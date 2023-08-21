@@ -8,6 +8,19 @@ body{
 body::-webkit-scrollbar {
   display: none;
 }
+#file-input{
+  color: transparent;
+}
+input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        display: none;
+      }
+      input[type='file']::after {
+        content: 'Select Profile Image';
+        margin-right: 30px;
+        color: black;
+      
+      }
 .chatBox::-webkit-scrollbar{
   display: none !important;
 }

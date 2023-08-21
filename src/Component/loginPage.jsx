@@ -7,7 +7,7 @@ import { auth, db, storage } from "../firebase";
 
 import { A11y, EffectCards, Navigation } from "swiper/modules";
 
-import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
 import "swiper/css";
@@ -22,9 +22,10 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import background from "../assets/loginBackground.jpg";
+import background from "../assets/loginBackground5.jpg";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useState } from "react";
+import { Flip, toast } from "react-toastify";
 const LoginPage = () => {
   const history = useNavigate();
   // const [user] = useAuthState(auth);
@@ -38,7 +39,6 @@ const LoginPage = () => {
   // const signOut = () => {
   //   auth.signOut();
   // };
-  const swiper = useSwiper();
 
   // image upload
   const [file, setFile] = useState("");
@@ -51,7 +51,7 @@ const LoginPage = () => {
   }
   const handleUpload = () => {
     if (!file) {
-      alert("Please upload an image first!");
+      toast.error("Please upload an image first!",{  transition: Flip , toastId:'upload'});
     }
 
     const storageRef = ref(storage, `/files/${file.name}`);
@@ -80,6 +80,8 @@ const LoginPage = () => {
     );
   };
 
+  // const registrationSchema = 
+
   return (
     <Container
       maxWidth="xl"
@@ -88,6 +90,7 @@ const LoginPage = () => {
         background: `url(${background})`,
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
+        backgroundPosition:'center',
         // filter: 'blur(8px)',
         height: "100vh",
         width: "100%",
@@ -144,10 +147,10 @@ const LoginPage = () => {
                 {() => (
                   <Form>
                     <Box width={300} mx={5} my={5}>
-                      <CustomTextField name="email" label="Email" />
+                      <CustomTextField required name="email" label="Email" />
                     </Box>
                     <Box width={300} mx={5}>
-                      <CustomTextField name="password" label="Password" />
+                      <CustomTextField required type="password" name="password" label="Password" />
                     </Box>
                     {/* {user ? (
                   <Box>
@@ -162,17 +165,7 @@ const LoginPage = () => {
                     </Typography>
                   </Box>
                 )} */}
-                    <Box my={3} onClick={() => swiper.slideNext()}>
-                      <Typography>
-                        Do not have account ?{" "}
-                        <span
-                          style={{ color: "blue", textDecoration: "underline" }}
-                        >
-                          sign up
-                        </span>{" "}
-                      </Typography>
-                    </Box>
-                    <Button type="submit" color="primary">
+                    <Button type="submit" sx={{":hover":{background:'#BB8FCE'},  background:'#BB8FCE', mt: 10, width:'50%', color:'white' }}>
                       Log In
                     </Button>
                   </Form>
@@ -196,6 +189,7 @@ const LoginPage = () => {
               </Typography>
 
               <Formik
+              // validationSchema={registrationSchema}
                 initialValues={{
                   username: "",
                   email: "",
@@ -203,7 +197,7 @@ const LoginPage = () => {
                   password: "",
                   confirmPassword: "",
                 }}
-                onSubmit={async (values) => {
+                onSubmit={async (values ,{resetForm}) => {
                   // values.preventDefault();
                   try {
                     const userCredential = await createUserWithEmailAndPassword(
@@ -212,10 +206,11 @@ const LoginPage = () => {
                       values.password
                     );
 
-                    console.log("userCredential", userCredential);
-
                     const user = userCredential.user;
-
+                    if (user) {
+                        resetForm();
+                        toast.success('Registered Successfully', {transition: Flip , toastId:'register'})                      
+                    }
                     await updateProfile(user, {
                       displayName: values.username,
                     });
@@ -227,9 +222,8 @@ const LoginPage = () => {
                       profileImage:imageUrl,
                       timestamp: new Date(),
                     });
-                    console.log("User registered:", user);
                   } catch (error) {
-                    console.error("Error creating user:", error.message);
+                    toast.error(error.message, {transition: Flip , toastId:'register'});
                   }
                 }}
               >
@@ -238,7 +232,11 @@ const LoginPage = () => {
                     <Box width={300} mx={5} my={5}>
                       <CustomTextField
                         type="text"
+                        required
                         name="username"
+                        onInput={(e) =>
+                          (e.target.value = e.target.value.slice(0, 30))
+                        }
                         label={"User name "}
                       />
                     </Box>
@@ -246,12 +244,17 @@ const LoginPage = () => {
                       <CustomTextField
                         type="email"
                         name="email"
+                        required
                         label={"Email"}
                       />
                     </Box>
                     <Box width={300} mx={5} my={5}>
                       <CustomTextField
                         type="number"
+                        required
+                        onInput={(e) =>
+                          (e.target.value = e.target.value.slice(0, 10))
+                        }
                         name="mobileNumber"
                         label={"Mobile Number"}
                       />
@@ -260,6 +263,10 @@ const LoginPage = () => {
                       <CustomTextField
                         name="password"
                         type="password"
+                        required
+                        onInput={(e) =>
+                          (e.target.value = e.target.value.slice(0, 30))
+                        }
                         label={"Password"}
                       />
                     </Box>
@@ -267,6 +274,9 @@ const LoginPage = () => {
                       <CustomTextField
                         name="confirmPassword"
                         type="password"
+                        onInput={(e) =>
+                          (e.target.value = e.target.value.slice(0, 30))
+                        }
                         label={"Confirm Password"}
                       />
                     </Box>
@@ -274,19 +284,22 @@ const LoginPage = () => {
                       <CustomTextField
                         name="file"
                         type="file"
+                        id='file-input'
                         onChange={handleChange}
                         // label={"Upload Image"}
                       />
-                      <Button onClick={handleUpload}>Upload</Button>
-                       <p>{percent}`% done`</p>
+                      <Button sx={{background:'#FBEEE6' , my:2 , px:3, color:'gray'}} onClick={handleUpload}>Upload</Button>
+                       {percent > 1 && 
+                       <p>{percent} % done</p>
+                       }
                     </Box>
 
-                    <Button type="submit" color="primary" sx={{ mt: "2rem" }}>
+                    <Button type="submit" sx={{":hover":{background:'#BB8FCE'},  background:'#BB8FCE', mt: "2rem", width:'50%', color:'white' }}>
                       Register
                     </Button>
-                    <Box onClick={(e) => swiper.slideNext(e.target)}>
+                    {/* <Box onClick={(e) => swiper.slideNext(e.target)}>
                       <Typography>Sign in</Typography>
-                    </Box>
+                    </Box> */}
                   </Form>
                 )}
               </Formik>

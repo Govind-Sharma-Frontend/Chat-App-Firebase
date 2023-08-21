@@ -1,7 +1,7 @@
 import { Box, TextField, Typography } from "@mui/material";
 import { useField } from "formik";
 
-const CustomTextField = ({label,...props}) => {
+const CustomTextField = ({required ,label,...props}) => {
   const [field, meta] = useField(props);
 
   return (
@@ -10,6 +10,7 @@ const CustomTextField = ({label,...props}) => {
         sx={{ width: "100%" }}
         variant="standard"
         placeholder="Enter here"
+        required={required}
         label={label}
         {...field}
         {...props}

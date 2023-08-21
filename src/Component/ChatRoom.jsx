@@ -31,6 +31,7 @@ import {
   query,
 } from "firebase/firestore";
 
+import ChatBoxBackground from '../assets/loginBackground6.jpg' 
 function UsersComponent(props) {
   const handleToggle = (username, userId, profileImage) => {
     props?.setReceiverData({
@@ -47,7 +48,7 @@ function UsersComponent(props) {
       sx={{
         width: "100%",
         maxWidth: 360,
-        bgcolor: "background.paper",
+        bgcolor: "#202123",
       }}
     >
       {props.users?.map((value) => {
@@ -199,13 +200,14 @@ console.log('allMessages',allMessages);
           style={{
             display: "flex",
             padding: 5,
+            margin:'.5rem 0rem',
             alignItems: "center",
             justifyContent: "space-between",
           }}
         >
-          <Box display={'flex'} alignItems={'center'} gap={1}>
+          <Box display={'flex'} alignItems={'center'} gap={1} >
            <Avatar
-           sx={{ width: 40, height: 40 }}
+           sx={{ width: 35, height: 35 }}
                     alt={`${user?.displayName}`}
                     src={`${user?.profileImage ?? user?.displayName }.jpg`}
                   />
@@ -221,7 +223,7 @@ console.log('allMessages',allMessages);
             Logout
           </Button>
         </div>
-        <Divider />
+        <Divider color="gray" />
         <div style={{ overflowY: "auto" }}>
           <UsersComponent
             users={users}
@@ -234,11 +236,11 @@ console.log('allMessages',allMessages);
       </Box>
 
       <Box style={right}>
-        <Box display={'flex'} bgcolor={'whitesmoke'} alignItems={'center'} >
+        <Box display={'flex'} bgcolor={'#353740'} alignItems={'center'} >
           {receiverData && 
         <Avatar sx={{ marginLeft:'1rem'}} src={receiverData ? receiverData?.profileImage : receiverData?.username}/>
           }
-        <h4 style={{ margin: 0, padding:receiverData?.username && 15.8, backgroundColor: "whitesmoke" }}>
+        <h4 style={{ margin: 0,color:'white', padding:receiverData?.username && 15.8 }}>
           {receiverData ? receiverData.username : ''}{" "}
         </h4>
         </Box>
@@ -263,7 +265,7 @@ console.log('allMessages',allMessages);
                 >
                   <span
                     style={{
-                      backgroundColor:user?.uid == messages.messageUserId ? "#BB8FCE" : "#40de43",
+                      backgroundColor:user?.uid == messages.messageUserId ? "#828282" : "#292c90",
                       padding: 10,
                       color:'white',
                       borderTopLeftRadius:
@@ -301,7 +303,7 @@ console.log('allMessages',allMessages);
             />
             <Button
               onClick={sendMessage}
-              sx={{ mr: 1, background: "skyblue", color: "white", ":hover":{background : "skyblue"} }}
+              sx={{ mr: 1, background: "#353740", color: "white", ":hover":{background : "#353740"} }}
             >
               {/* <Typography></Typography> */}
               <SendIcon style={{ margin: 1 }} />
@@ -317,7 +319,7 @@ const root = {
   display: "flex",
   flexDirection: "row",
   flex: 1,
-  background: "",
+  background: "#202123",
   width: "100%",
 };
 
@@ -325,14 +327,18 @@ const left = {
   display: "flex",
   flex: 0.2,
   height: "100vh",
-  background: "",
+  background: "#202123",
+  color:'white',
   // margin: 10,
   flexDirection: "column",
 };
 
 const right = {
   display: "flex",
-  background: "#FBEEE6",
+  // background: "#FBEEE6",
+  background:`url(${ChatBoxBackground})`,
+backgroundPosition:'center',
+backgroundSize:'cover',
   flex: 0.8,
   height: "100vh",
   // margin: 10,
@@ -342,16 +348,16 @@ const right = {
 const input = {
   flex: 1,
   outline: "none",
+  color:"white",
   marginLeft: ".5rem",
   marginRight: "1rem",
-  backgroundColor: "#e7e7e7",
+  backgroundColor: "#353740",
   borderRadius: 5,
   paddingLeft: ".5rem",
   border: "none",
 };
 
 const messagesDiv = {
-  backgroundColor: "#FBEEE6",
   padding: 5,
   marginRight: ".2rem",
   display: "flex",
