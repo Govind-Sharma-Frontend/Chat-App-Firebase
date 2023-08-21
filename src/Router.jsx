@@ -1,14 +1,14 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import LoginPage from "./Component/loginPage"
 // import Dashboard from "./Component/dashboard"
-import { auth } from "./firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
+// import { auth } from "./firebase";
+// import { useAuthState } from "react-firebase-hooks/auth";
 import Home from "./Component/ChatRoom";
 import SwiperSlider from "./Component/swiper";
 
 const Router = () => {
-  const [user] = useAuthState(auth);
-  console.log('user',user);
+  // const [user] = useAuthState(auth);
+  // console.log('user',user);
   return (
     <BrowserRouter>
         <Routes>
@@ -16,7 +16,7 @@ const Router = () => {
             <Route path="/slider" element={<SwiperSlider/>}/>
             
             
-            <Route path="/dashboard" element={user ?  <Home/> : <LoginPage/>}/>
+            <Route path="/dashboard" element={<Home/>}/>
         </Routes> 
     </BrowserRouter>
   )

@@ -11,6 +11,9 @@ body::-webkit-scrollbar {
 .chatBox::-webkit-scrollbar{
   display: none !important;
 }
+.messgageBox::-webkit-scrollbar{
+  display: none !important;
+}
 .swiper-slide-shadow{
   background: none !important;
 }
