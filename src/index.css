@@ -8,9 +8,9 @@ body{
 body::-webkit-scrollbar {
   display: none;
 }
-#file-input{
+/* #file-input{
   color: transparent;
-}
+} */
 input::-webkit-outer-spin-button,
       input::-webkit-inner-spin-button {
         display: none;
